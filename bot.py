@@ -37,7 +37,7 @@ def get_signal():
     else:
         target = round(random.uniform(5.0, 10.0), 2)
         text = f"🚀 СИГНАЛ: РАКЕТКА\n\nЦель: выйти на {target}x\nТип: RISKY, фан\nСмысл: заходит редко, только мелкая сумма."
-    text += "\n\nБот не подключен к 1win и не знает исход раунда. Это не гарантия, а цель выхода. 18+"
+    text += "\n\nБот не подключен к игре и не знает исход раунда. Это не гарантия, а цель выхода. 18+"
     return text, target
 
 @dp.message(Command("start"))
@@ -47,8 +47,8 @@ async def start(message: types.Message):
         "Флоу такой:\n"
         "1. Жмешь /signal в боте\n"
         "2. Получаешь цель\n"
-        "3. Идешь в 1win, жмешь Старт в Ракетке\n"
-        "4. Возвращаешься сюда и жмешь Зашел / Не зашел\n\n"
+        "3. Идешь в Ракетку, жмешь Старт\n"
+        "4. Возвращаешься сюда и жмешь Выигрыш / Проигрыш\n\n"
         "Команды: /signal - сигнал, /stats - статистика"
     )
 
@@ -67,8 +67,8 @@ async def go(callback: types.CallbackQuery):
     await callback.message.answer(
         "Ок, жду тебя после раунда. Как сыграешь, отметь:",
         reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✅ Зашел", callback_data="win"),
-             InlineKeyboardButton(text="❌ Не зашел", callback_data="lose")]
+            [InlineKeyboardButton(text="✅ Выигрыш", callback_data="win"),
+             InlineKeyboardButton(text="❌ Проигрыш", callback_data="lose")]
         ])
     )
 
@@ -85,7 +85,7 @@ async def show_stats(message: types.Message):
         await message.answer("Пока нет сигналов")
         return
     percent = round(stats["win"] / stats["total"] * 100, 1)
-    await message.answer(f"Всего сигналов: {stats['total']}\nЗашло: {stats['win']}\nПроходимость: {percent}%")
+    await message.answer(f"Всего сигналов: {stats['total']}\nВыигрышей: {stats['win']}\nПроходимость: {percent}%")
 
 async def main():
     await dp.start_polling(bot)
