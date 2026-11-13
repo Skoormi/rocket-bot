@@ -59,7 +59,7 @@ async def signal(message: types.Message):
     stats["total"] += 1
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Понял, иду играть", callback_data="go")],
-        [InlineKeyboardButton(text="Перейти в Ракетку", url="https://1win - СЮДА ВСТАВИШЬ СВОЮ РЕФ ССЫЛКУ")],
+        [InlineKeyboardButton(text="Перейти в Ракетку", url="https://1win.com")],
     ])
     await message.answer(text, reply_markup=keyboard)
 
