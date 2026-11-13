@@ -74,4 +74,23 @@ async def go(callback: types.CallbackQuery):
         ])
     )
 
-@dp.callback_query(F.data.in_(["win
+@dp.callback_query(F.data.in_(["win", "lose"]))
+async def result(callback: types.CallbackQuery):
+    if callback.data == "win":
+        stats["win"] += 1
+    await callback.answer("Записал")
+    await callback.message.edit_reply_markup(reply_markup=None)
+
+@dp.message(Command("stats"))
+async def show_stats(message: types.Message):
+    if stats["total"] == 0:
+        await message.answer("Пока нет сигналов")
+        return
+    percent = round(stats["win"] / stats["total"] * 100, 1)
+    await message.answer(f"Всего сигналов: {stats['total']}\nЗашло: {stats['win']}\nПроходимость: {percent}%")
+
+async def main():
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
