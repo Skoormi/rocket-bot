@@ -37,7 +37,6 @@ def get_signal():
     else:
         target = round(random.uniform(5.0, 10.0), 2)
         text = f"🚀 СИГНАЛ: РАКЕТКА\n\nЦель: выйти на {target}x\nТип: RISKY, фан\nСмысл: заходит редко, только мелкая сумма."
-    text += "\n\nБот не подключен к игре и не знает исход раунда. Это не гарантия, а цель выхода. 18+"
     return text, target
 
 @dp.message(Command("start"))
