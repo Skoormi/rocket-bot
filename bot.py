@@ -7,7 +7,6 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-# Фейковый сайт, чтобы Render видел открытый порт и не вырубал бота
 def run_server():
     port = int(os.getenv("PORT", 10000))
     class Handler(BaseHTTPRequestHandler):
@@ -59,7 +58,6 @@ async def signal(message: types.Message):
     stats["total"] += 1
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Понял, иду играть", callback_data="go")],
-        [InlineKeyboardButton(text="Перейти в Ракетку", url="https://1win.com")],
     ])
     await message.answer(text, reply_markup=keyboard)
 
