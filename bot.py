@@ -1,9 +1,25 @@
 import asyncio
 import os
 import random
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+# Фейковый сайт, чтобы Render видел открытый порт и не вырубал бота
+def run_server():
+    port = int(os.getenv("PORT", 10000))
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"Bot is running")
+        def log_message(self, *args):
+            pass
+    HTTPServer(("0.0.0.0", port), Handler).serve_forever()
+
+threading.Thread(target=run_server, daemon=True).start()
 
 TOKEN = os.getenv("BOT_TOKEN")
 bot = Bot(token=TOKEN)
@@ -58,23 +74,4 @@ async def go(callback: types.CallbackQuery):
         ])
     )
 
-@dp.callback_query(F.data.in_(["win", "lose"]))
-async def result(callback: types.CallbackQuery):
-    if callback.data == "win":
-        stats["win"] += 1
-    await callback.answer("Записал")
-    await callback.message.edit_reply_markup(reply_markup=None)
-
-@dp.message(Command("stats"))
-async def show_stats(message: types.Message):
-    if stats["total"] == 0:
-        await message.answer("Пока нет сигналов")
-        return
-    percent = round(stats["win"] / stats["total"] * 100, 1)
-    await message.answer(f"Всего сигналов: {stats['total']}\nЗашло: {stats['win']}\nПроходимость: {percent}%")
-
-async def main():
-    await dp.start_polling(bot)
-
-if __name__ == "__main__":
-    asyncio.run(main())
+@dp.callback_query(F.data.in_(["win
